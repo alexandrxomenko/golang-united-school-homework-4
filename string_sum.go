@@ -3,7 +3,7 @@ package string_sum
 import (
 	"errors"
 	"fmt"
-	"regexp"
+	"log"
 	"strconv"
 	"strings"
 	"unicode"
@@ -36,27 +36,18 @@ func StringSum(input string) (output string, err error) {
 	in := []rune(strings.ReplaceAll(input, " ", ""))
 	if len(in) == 0 {
 		return "", fmt.Errorf(errFormat, errorEmptyInput)
-
 	}
+
 	var listNumbers []int
 	var num []rune
 
 	isDigitalBefore := false
-	isDigitalNow := false
 
 	for i := 0; i < len(in); i++ {
-		first := false
-		AddToLists := false
-		x, _ := regexp.MatchString("[0-9+-]", string(in[i]))
-
-		if !x {
-			return "", fmt.Errorf(errFormat, errorInvalidInput)
-		}
-
+		var first, AddToLists, isDigitalNow = false, false, false
 		if len(num) == 0 {
 			first = true
 		}
-
 		num = append(num, in[i])
 
 		if unicode.IsDigit(in[i]) {
@@ -79,6 +70,7 @@ func StringSum(input string) (output string, err error) {
 				number, err = strconv.Atoi(string(num[0 : len(num)-1]))
 			}
 			if err != nil {
+				log.Println(err)
 				return "", fmt.Errorf(errFormat, err)
 			}
 
